@@ -140,51 +140,56 @@ def display_movies_in_grid(movies, with_rating=False):
 def show_collaborative_page():
     st.title("Rate Movies for Recommendations")
 
-    # Custom CSS for scrollable container
+    # Display movies for rating
+    movies = get_displayed_movies()
+    ratings = {}
+
+    st.subheader("Step 1: Rate as many movies as possible")
+
+    # Custom CSS for the scrollable container
     st.markdown(
         """
         <style>
         .scrollable-box {
-            height: 50vh; /* Half of the viewport height */
-            overflow-y: auto;
+            max-height: 400px; /* Height of the box */
+            overflow-y: auto; /* Vertical scroll */
+            border: 1px solid #ddd; /* Border */
+            padding: 10px; /* Inner padding */
+            background-color: #f9f9f9; /* Background color */
+            border-radius: 8px; /* Rounded corners */
+        }
+        .movie-card {
             padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #f9f9f9;
+            text-align: center;
+        }
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Responsive grid */
+            gap: 15px; /* Spacing between items */
         }
         </style>
         """,
         unsafe_allow_html=True,
     )
 
-    # Display movies for rating
-    movies = get_displayed_movies()
-    ratings = {}
+    # Create a scrollable container
+    with st.container():
+        st.markdown('<div class="scrollable-box">', unsafe_allow_html=True)
+        st.markdown('<div class="movie-grid">', unsafe_allow_html=True)
 
-    st.subheader("Rate These Movies")
-    st.markdown('<div class="scrollable-box">', unsafe_allow_html=True)
-    
-    cols_per_row = 5
-    num_movies = len(movies)
-    rows = (num_movies + cols_per_row - 1) // cols_per_row  # Calculate number of rows
+        for idx, movie in movies.iterrows():
+            st.markdown('<div class="movie-card">', unsafe_allow_html=True)
+            rating = get_movie_card(movie, with_rating=True)
+            if rating:
+                ratings[movie.movie_id] = rating
+            st.markdown('</div>', unsafe_allow_html=True)
 
-    # Display movies in a grid within the scrollable container
-    for i in range(rows):
-        cols = st.columns(cols_per_row)
-        for j in range(cols_per_row):
-            idx = i * cols_per_row + j
-            if idx < num_movies:
-                movie = movies.iloc[idx]
-                with cols[j]:
-                    rating = get_movie_card(movie, with_rating=True)
-                    if rating:
-                        ratings[movie.movie_id] = rating
+        st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
-    st.markdown('</div>', unsafe_allow_html=True)
-
-    # Show recommendations button below the scrollable box
-    st.subheader("Discover Movies You Might Like")
-    if st.button("Get Recommendations"):
+    # Show the "Get Recommendations" button
+    st.subheader("Step 2: Discover movies you might like")
+    if st.button("Click here to get your recommendations"):
         if not ratings:
             st.warning("Please rate at least one movie to get recommendations!")
             return
