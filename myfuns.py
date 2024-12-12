@@ -155,7 +155,7 @@ def myIBCF(S, new_user):
     predictions = sorted(predictions, key=lambda x: x[1], reverse=True)
 
     # Extract top 10 recommendations with actual movie IDs
-    movie_ids = R_df.columns.tolist()
+    movie_ids = S.columns.tolist()
     recommendations = [(movie_ids[i], f"{predicted_rating:.7f}") for i, predicted_rating in predictions[:10]]
 
     # If fewer than 10 predictions, add popular movies based on average ratings
