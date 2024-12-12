@@ -93,27 +93,82 @@ def display_movies_in_grid(movies, with_rating=False):
                 with cols[j]:
                     get_movie_card(movie, with_rating=with_rating)
 
-def show_genre_recommendation_page():
-    st.title("Select a Genre")
-    genre = st.selectbox("Choose a genre", genres)
+# def show_genre_recommendation_page():
+#     st.title("Select a Genre")
+#     genre = st.selectbox("Choose a genre", genres)
 
-    if genre:
-        st.subheader(f"Popular movies in {genre}")
-        movies = get_popular_movies(genre)
-        display_movies_in_grid(movies)
+#     if genre:
+#         st.subheader(f"Popular movies in {genre}")
+#         movies = get_popular_movies(genre)
+#         display_movies_in_grid(movies)
+
+# def show_collaborative_page():
+#     st.title("Rate Movies for Recommendations")
+
+#     # Display movies for rating
+#     movies = get_displayed_movies()
+#     ratings = {}
+
+#     st.subheader("Rate these movies")
+#     cols_per_row = 5
+#     num_movies = len(movies)
+#     rows = (num_movies + cols_per_row - 1) // cols_per_row  # Calculate number of rows
+
+#     for i in range(rows):
+#         cols = st.columns(cols_per_row)
+#         for j in range(cols_per_row):
+#             idx = i * cols_per_row + j
+#             if idx < num_movies:
+#                 movie = movies.iloc[idx]
+#                 with cols[j]:
+#                     rating = get_movie_card(movie, with_rating=True)
+#                     if rating:
+#                         ratings[movie.movie_id] = rating
+    
+
+#     # Show recommendations button
+#     if st.button("Get Recommendations"):
+#         if not ratings:
+#             st.warning("Please rate at least one movie to get recommendations!")
+#             return
+
+#         # Fetch recommendations
+#         st.subheader("Your Recommendations")
+#         recommended_movies = get_recommended_movies(ratings)
+#         display_movies_in_grid(recommended_movies)
 
 def show_collaborative_page():
     st.title("Rate Movies for Recommendations")
+
+    # Custom CSS for scrollable container
+    st.markdown(
+        """
+        <style>
+        .scrollable-box {
+            height: 50vh; /* Half of the viewport height */
+            overflow-y: auto;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
 
     # Display movies for rating
     movies = get_displayed_movies()
     ratings = {}
 
-    st.subheader("Rate these movies")
+    st.subheader("Rate These Movies")
+    st.markdown('<div class="scrollable-box">', unsafe_allow_html=True)
+    
     cols_per_row = 5
     num_movies = len(movies)
     rows = (num_movies + cols_per_row - 1) // cols_per_row  # Calculate number of rows
 
+    # Display movies in a grid within the scrollable container
     for i in range(rows):
         cols = st.columns(cols_per_row)
         for j in range(cols_per_row):
@@ -124,9 +179,11 @@ def show_collaborative_page():
                     rating = get_movie_card(movie, with_rating=True)
                     if rating:
                         ratings[movie.movie_id] = rating
-    
 
-    # Show recommendations button
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    # Show recommendations button below the scrollable box
+    st.subheader("Discover Movies You Might Like")
     if st.button("Get Recommendations"):
         if not ratings:
             st.warning("Please rate at least one movie to get recommendations!")
@@ -136,8 +193,6 @@ def show_collaborative_page():
         st.subheader("Your Recommendations")
         recommended_movies = get_recommended_movies(ratings)
         display_movies_in_grid(recommended_movies)
-
-
 
 def main():
     st.set_page_config(page_title="Movie Recommender", layout="wide")
