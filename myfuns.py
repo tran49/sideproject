@@ -31,7 +31,7 @@ genre_top10 = pd.read_csv('genre_top10.csv', index_col=0)
 
 cos_similarity_matrix = pd.read_csv('cos_similarity_matrix_sorted.csv', index_col=0)
 
-popularity = pd.read_csv('popularity.csv', index_col = 0)
+popularity = pd.read_csv('popularity.csv')
 def get_displayed_movies():
     return movies.head(100)
 
