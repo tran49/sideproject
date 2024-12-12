@@ -174,7 +174,7 @@ def myIBCF(S, new_user):
             if len(recommendations) >= 10:
                 break
             print("row['MovieID'] : ", row['MovieID'])
-            recommendations.append(int(float(row['MovieID'][1:])))
+            recommendations.append(int(float(row['MovieID'])))
           
     print("recommendation result", recommendations)
     return recommendations
