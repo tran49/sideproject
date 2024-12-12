@@ -64,48 +64,114 @@ def get_popular_movies(genre: str):
     #return genre_top10[genre].tolist()
 
 
-def myIBCF(S, user_data):
-    rec = list()  # list of recommended movie id
-    #rec_ratings = list()  # list of predicted rating of recommended movie
+# def myIBCF(S, user_data):
+#     rec = list()  # list of recommended movie id
+#     #rec_ratings = list()  # list of predicted rating of recommended movie
 
-    #S = pd.read_csv('cos_similarity_matrix.csv', index_col=0)
-    movie_id = S.columns
+#     #S = pd.read_csv('cos_similarity_matrix.csv', index_col=0)
+#     movie_id = S.columns
 
-    # for each row, keep top 30 and set the rest to NA
-    S = S.to_numpy()
-    #for i in range(3706):
-        #S[i, (np.nan_to_num(S[i, :])).argsort()[:3676]] = np.nan
+#     # for each row, keep top 30 and set the rest to NA
+#     S = S.to_numpy()
+#     #for i in range(3706):
+#         #S[i, (np.nan_to_num(S[i, :])).argsort()[:3676]] = np.nan
 
-    pred = np.array([0.0] * 3706)
-    user = np.nan_to_num(user_data)
-    mask = user != 0
+#     pred = np.array([0.0] * 3706)
+#     user = np.nan_to_num(user_data)
+#     mask = user != 0
 
-    for i in range(3706):
-        if mask[i]:  # user already review the movie, set prediciton to 0 to exclude it from recommendation
-            pred[i] = 0
+#     for i in range(3706):
+#         if mask[i]:  # user already review the movie, set prediciton to 0 to exclude it from recommendation
+#             pred[i] = 0
+#             continue
+
+#         si = np.nan_to_num(S[i, :])
+#         total_si = np.sum(si * mask)
+
+#         if total_si == 0:  # user didn't review any top 30 similar movies, set predicion to 0 to exclude it from recommendation
+#             pred[i] = 0
+#         else:
+#             pred[i] = np.sum(si * user) / total_si
+
+#     # rec = movie_id[pred.argsort()[-10:]]
+#     num_zero = np.sum(pred[pred.argsort()[-10:]] == 0)
+
+#     if num_zero < 10:
+#         rec = movie_id[pred.argsort()[-(10 - num_zero):]].astype(int).to_list()[-1:-(11 - num_zero):-1]
+#         #rec_ratings = pred[pred.argsort()[-(10 - num_zero):]].tolist()[-1:-(11 - num_zero):-1]
+
+#         if len(rec) < 10:  # fewer than 10 predicitons are non-NA,
+#             sid = movie_id.get_loc(str(rec[0]))  # movies similar to top recommended movie
+#             for m in S[sid, (np.nan_to_num(S[sid, :])).argsort()[-1:-31:-1]]:
+#                 if m not in rec:
+#                     rec.append(m)
+#                     if len(rec) == 10:
+#                         break
+
+#     return rec#, rec_ratings
+
+
+def myIBCF(S, new_user):
+    """
+    Implements Item-Based Collaborative Filtering (IBCF) for a new user.
+
+    Input:
+        new_user (np.array): A 3706-by-1 vector containing ratings for 3706 movies by a new user.
+                             Ratings should be integers 1, 2, 3, 4, or 5, and NA values as np.nan.
+                             The order of the movies should match the rating matrix R.
+
+    Output:
+        recommendations (list): Top 10 recommended movies as tuples of (movie_id, predicted_rating).
+    """
+    predictions = []
+
+    for i in range(S.shape[0]):  # Loop through all movies (rows in S)
+        # Skip movies already rated by the new user
+        if not np.isnan(new_user[i]):
             continue
 
-        si = np.nan_to_num(S[i, :])
-        total_si = np.sum(si * mask)
+        # Identify S(i) = {l: Sil ≠ NA}, where l ≠ NA in S[i, :]
+        valid_similarities = ~np.isnan(S[i, :])
+        weights = S[i, valid_similarities]
+        rated_movies = new_user[valid_similarities]
 
-        if total_si == 0:  # user didn't review any top 30 similar movies, set predicion to 0 to exclude it from recommendation
-            pred[i] = 0
-        else:
-            pred[i] = np.sum(si * user) / total_si
+        # Consider only movies rated by the new user
+        rated_indices = ~np.isnan(rated_movies)
+        weights = weights[rated_indices]
+        ratings = rated_movies[rated_indices]
 
-    # rec = movie_id[pred.argsort()[-10:]]
-    num_zero = np.sum(pred[pred.argsort()[-10:]] == 0)
+        # Skip if no valid ratings are available
+        if len(ratings) == 0 or len(weights) == 0:
+            continue
 
-    if num_zero < 10:
-        rec = movie_id[pred.argsort()[-(10 - num_zero):]].astype(int).to_list()[-1:-(11 - num_zero):-1]
-        #rec_ratings = pred[pred.argsort()[-(10 - num_zero):]].tolist()[-1:-(11 - num_zero):-1]
+        # Compute prediction for movie i
+        numerator = np.sum(weights * ratings)
+        denominator = np.sum(weights)
+        if denominator > 0:
+            predicted_rating = round(numerator / denominator, 7)
+            predictions.append((i, predicted_rating))
 
-        if len(rec) < 10:  # fewer than 10 predicitons are non-NA,
-            sid = movie_id.get_loc(str(rec[0]))  # movies similar to top recommended movie
-            for m in S[sid, (np.nan_to_num(S[sid, :])).argsort()[-1:-31:-1]]:
-                if m not in rec:
-                    rec.append(m)
-                    if len(rec) == 10:
-                        break
+    # Sort predictions by rating in descending order
+    predictions = sorted(predictions, key=lambda x: x[1], reverse=True)
 
-    return rec#, rec_ratings
+    # Extract top 10 recommendations with actual movie IDs
+    movie_ids = R_df.columns.tolist()
+    recommendations = [(movie_ids[i], f"{predicted_rating:.7f}") for i, predicted_rating in predictions[:10]]
+
+    # If fewer than 10 predictions, add popular movies based on average ratings
+    if len(predictions) < 10:
+        # System 1 popular movies
+        popular_movies = popularity[popularity["review_count"] >= 2000]
+        top_movies = popular_movies.sort_values("avg_rating", ascending=False).head(10)
+
+        # Exclude movies already rated by the user
+        already_rated = {movie_ids[i] for i, rating in enumerate(new_user) if not np.isnan(rating)}
+        remaining_popular_movies = top_movies[~top_movies['MovieID'].isin(already_rated)]
+
+        # Fill the gap with popular movies, adding their average rating
+        for _, row in remaining_popular_movies.iterrows():
+            if len(recommendations) >= 10:
+                break
+            recommendations.append((f"m{row['MovieID']}", f"{row['avg_rating']:.7f}"))
+
+    return recommendations
