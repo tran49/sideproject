@@ -51,14 +51,14 @@ def get_recommended_movies(new_user_ratings):
     rec = myIBCF(cos_similarity_matrix, unew)
 
     ret = pd.DataFrame({'movie_id': rec,
-                        'title': [movies[movies.movie_id == id]['title'].values[0] for id, rating in rec]})
+                        'title': [movies[movies.movie_id == id]['title'] for id, rating in rec]})
     return ret
 
 
 def get_popular_movies(genre: str):
     rec = genre_top10[genre].to_list()
     ret = pd.DataFrame({'movie_id': rec,
-                        'title': [movies[movies.movie_id == id]['title'].values[0] for id, rating in rec]})
+                        'title': [movies[movies.movie_id == id]['title'] for id, rating in rec]})
     return ret
     #return movies[movies.movie_id.isin(genre_top10[genre])]
     #return genre_top10[genre].tolist()
