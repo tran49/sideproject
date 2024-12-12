@@ -59,22 +59,7 @@ from myfuns import genres, get_displayed_movies, get_popular_movies, get_recomme
 #             with st.container():
 #                 get_movie_card(movie)
 
-# def main():
-#     st.set_page_config(page_title="Movie Recommender", layout="wide")
 
-#     # Sidebar Navigation
-#     st.sidebar.title("Movie Recommender")
-#     page = st.sidebar.radio(
-#         "Navigation", ["System 1 - Genre", "System 2 - Collaborative"]
-#     )
-
-#     if page == "System 1 - Genre":
-#         show_genre_recommendation_page()
-#     elif page == "System 2 - Collaborative":
-#         show_collaborative_page()
-
-# if __name__ == "__main__":
-#     main()
 
 
 def get_movie_card(movie, with_rating=False):
@@ -137,3 +122,21 @@ def show_collaborative_page():
         st.subheader("Your Recommendations")
         recommended_movies = get_recommended_movies(ratings)
         display_movies_in_grid(recommended_movies)
+
+
+def main():
+    st.set_page_config(page_title="Movie Recommender", layout="wide")
+
+    # Sidebar Navigation
+    st.sidebar.title("Movie Recommender")
+    page = st.sidebar.radio(
+        "Navigation", ["System 1 - Genre", "System 2 - Collaborative"]
+    )
+
+    if page == "System 1 - Genre":
+        show_genre_recommendation_page()
+    elif page == "System 2 - Collaborative":
+        show_collaborative_page()
+
+if __name__ == "__main__":
+    main()
