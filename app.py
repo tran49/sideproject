@@ -110,12 +110,20 @@ def show_collaborative_page():
     ratings = {}
 
     st.subheader("Rate these movies")
-    display_movies_in_grid(movies, with_rating=True)
-    for idx, movie in movies.iterrows():
-        with st.container():
-            rating = get_movie_card(movie, with_rating=True)
-            if rating:
-                ratings[movie.movie_id] = rating
+    cols_per_row = 5
+    num_movies = len(movies)
+    rows = (num_movies + cols_per_row - 1) // cols_per_row  # Calculate number of rows
+
+    for i in range(rows):
+        cols = st.columns(cols_per_row)
+        for j in range(cols_per_row):
+            idx = i * cols_per_row + j
+            if idx < num_movies:
+                movie = movies.iloc[idx]
+                with cols[j]:
+                    rating = get_movie_card(movie, with_rating=True)
+                    if rating:
+                        ratings[movie.movie_id] = rating
 
     # Show recommendations button
     if st.button("Get Recommendations"):
