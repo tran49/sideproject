@@ -110,9 +110,10 @@ def show_collaborative_page():
     ratings = {}
 
     st.subheader("Rate these movies")
+    display_movies_in_grid(movies, with_rating=True)
+    st.subheader("Rate these movies")
     for idx, movie in movies.iterrows():
-        with st.container():
-            rating = get_movie_card(movies, with_rating=True)
+            rating = get_movie_card(movie, with_rating=True)
             if rating:
                 ratings[movie.movie_id] = rating
 
