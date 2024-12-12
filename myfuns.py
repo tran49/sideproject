@@ -57,7 +57,7 @@ def get_recommended_movies(new_user_ratings):
 
 def get_popular_movies(genre: str):
     top10 = genre_top10[genre].to_list()
-    ret = pd.DataFrame({'movie_id': rec,
+    ret = pd.DataFrame({'movie_id': top10,
                         'title': [movies[movies.movie_id == id]['title'].values[0] for id in top10]})
     return ret
     #return movies[movies.movie_id.isin(genre_top10[genre])]
