@@ -93,14 +93,14 @@ def display_movies_in_grid(movies, with_rating=False):
                 with cols[j]:
                     get_movie_card(movie, with_rating=with_rating)
 
-# def show_genre_recommendation_page():
-#     st.title("Select a Genre")
-#     genre = st.selectbox("Choose a genre", genres)
+def show_genre_recommendation_page():
+    st.title("Select a Genre")
+    genre = st.selectbox("Choose a genre", genres)
 
-#     if genre:
-#         st.subheader(f"Popular movies in {genre}")
-#         movies = get_popular_movies(genre)
-#         display_movies_in_grid(movies)
+    if genre:
+        st.subheader(f"Popular movies in {genre}")
+        movies = get_popular_movies(genre)
+        display_movies_in_grid(movies)
 
 # def show_collaborative_page():
 #     st.title("Rate Movies for Recommendations")
