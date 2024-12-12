@@ -173,7 +173,7 @@ def myIBCF(S, new_user):
         for _, row in remaining_popular_movies.iterrows():
             if len(recommendations) >= 10:
                 break
-            recommendations.append((f"m{str(int(row['MovieID']))}"))
+            recommendations.append((f"m{str(int(row['MovieID'][1:]))}"))
           
     print("recommendation result", recommendations)
     return recommendations
