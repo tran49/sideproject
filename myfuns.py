@@ -163,6 +163,7 @@ def myIBCF(S, new_user):
         # System 1 popular movies
         popular_movies = popularity[popularity["review_count"] >= 2000]
         top_movies = popular_movies.sort_values("avg_rating", ascending=False).head(10)
+        print(top_movies.columns)
 
         # Exclude movies already rated by the user
         already_rated = {movie_ids[i] for i, rating in enumerate(new_user) if not np.isnan(rating)}
