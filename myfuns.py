@@ -49,7 +49,7 @@ def get_recommended_movies(new_user_ratings):
         unew[movie_id_list.index(str(k))] = float(v)
 
     rec = myIBCF(cos_similarity_matrix, unew)
-
+    print("rec result: ",rec)
     ret = pd.DataFrame({'movie_id': rec,
                         'title': [movies[movies.movie_id == id]['title'].values[0] for id in rec]})
     return ret
