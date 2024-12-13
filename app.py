@@ -94,7 +94,8 @@ def display_movies_in_grid(movies, with_rating=False):
                     get_movie_card(movie, with_rating=with_rating)
 
 def show_genre_recommendation_page():
-    st.title("Select a Genre")
+    st.title("Project 4 - lukep2 - xiyingz2 -atran49")
+    st.title("Select a Genre to see popular movies")
     genre = st.selectbox("Choose a genre", genres)
 
     if genre:
@@ -103,7 +104,9 @@ def show_genre_recommendation_page():
         display_movies_in_grid(movies)
 
 def show_collaborative_page():
+    st.title("Project 4 - lukep2 - xiyingz2 -atran49")
     st.title("Rate Movies for Recommendations")
+    
 
     # Display movies for rating
     movies = get_displayed_movies()
