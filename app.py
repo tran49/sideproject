@@ -79,7 +79,7 @@ def show_collaborative_page():
         # Fetch recommendations
         st.subheader("Your Recommendations")
         recommended_movies = get_recommended_movies(ratings)
-        st.write(recommended_movies)
+
         display_movies_in_grid(recommended_movies)
 
 
