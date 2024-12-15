@@ -33,7 +33,7 @@ def get_recommended_movies(new_user_ratings):
     st.write(rec)
 
     rec_movies = pd.DataFrame({'movie_id': rec,
-                        'title': [movies[movies.movie_id == id]['title'].values[0] for id in rec]})
+                        'title': [movies[movies.movie_id == id]['title'].values[0] for (id,_) in rec]})
     return rec_movies
 
 
