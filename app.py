@@ -1,9 +1,7 @@
 import streamlit as st
 import pandas as pd
 from typing import Dict
-from myfuns import genres, get_displayed_movies, get_popular_movies, get_recommended_movies, cos_similarity_matrix
-
-st.write(cos_similarity_matrix[0,:])
+from myfuns import genres, get_displayed_movies, get_popular_movies, get_recommended_movies
 
 def get_movie_card(movie, with_rating=False):
     """Generates a movie card with an optional rating input."""
