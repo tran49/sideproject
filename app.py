@@ -4,9 +4,10 @@ from typing import Dict
 from myfuns import genres, get_displayed_movies, get_popular_movies, get_recommended_movies
 
 def get_movie_card(movie, with_rating=False):
+    id = int(movie.movie_id)
     """Generates a movie card with an optional rating input."""
     st.image(
-        f"https://liangfgithub.github.io/MovieImages/{movie.movie_id}.jpg?raw=true",
+        f"https://liangfgithub.github.io/MovieImages/{id}.jpg?raw=true",
         width=150,
     )
     st.markdown(f"**{movie.title}**")
