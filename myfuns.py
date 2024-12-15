@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import streamlit as st
 
 movies = pd.read_csv('movies.dat', sep='::', engine='python',
                      encoding='ISO-8859-1', header=None)
@@ -29,9 +30,10 @@ def get_recommended_movies(new_user_ratings):
         unew[movie_id_list.index(str(k))] = float(v)
 
     rec = myIBCF(cos_similarity_matrix, unew)
+    st.write(rec)
 
     rec_movies = pd.DataFrame({'movie_id': rec,
-                        'title': [movies[movies.movie_id.astype(str) == id]['title'].values[0] for id in rec]})
+                        'title': [movies[movies.movie_id == id]['title'].values[0] for id in rec]})
     return rec_movies
 
 
