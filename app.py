@@ -66,7 +66,7 @@ def show_collaborative_page():
                 movie = movies.iloc[idx]
                 with cols[j]:
                     rating = get_movie_card(movie, with_rating=True)
-                    if rating:
+                    if rating != "Not rated":
                         ratings[movie.movie_id] = rating
     
 
