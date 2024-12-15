@@ -5,7 +5,7 @@ from myfuns import genres, get_displayed_movies, get_popular_movies, get_recomme
 
 def get_movie_card(movie, with_rating=False):
     """Generates a movie card with an optional rating input."""
-    st.write(movie)
+    st.write(movie.class)
     st.image(
         f"https://liangfgithub.github.io/MovieImages/{movie.movie_id}.jpg?raw=true",
         width=150,
