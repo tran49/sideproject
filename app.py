@@ -5,7 +5,6 @@ from myfuns import genres, get_displayed_movies, get_popular_movies, get_recomme
 
 def get_movie_card(movie, with_rating=False):
     """Generates a movie card with an optional rating input."""
-    st.write(type(movie))
     st.image(
         f"https://liangfgithub.github.io/MovieImages/{movie.movie_id}.jpg?raw=true",
         width=150,
@@ -15,8 +14,8 @@ def get_movie_card(movie, with_rating=False):
     if with_rating:
         return st.radio(
             f"Rate {movie.title}",
-            [None, 1, 2, 3, 4, 5],
-            horizontal=True,
+            [None, ⭐, ⭐⭐, ⭐⭐⭐, ⭐⭐⭐⭐, ⭐⭐⭐⭐⭐],
+            horizontal=False,
             key=f"rating_{movie.movie_id}",
         )
 
