@@ -6,8 +6,6 @@ movies = pd.read_csv('movies.dat', sep='::', engine='python',
                      encoding='ISO-8859-1', header=None)
 movies.columns = ['movie_id', 'title', 'genres']
 
-st.write(movies['movie_id'])
-
 genres = ['Action', 'Adventure', 'Animation', "Children's", "Comedy",  "Crime",
          'Documentary', 'Drama', 'Fantasy', 'Film-Noir', 'Horror', 'Musical',
          'Mystery', 'Romance', 'Sci-Fi', 'Thriller', 'War', 'Western']
