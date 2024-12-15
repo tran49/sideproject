@@ -31,7 +31,7 @@ def get_recommended_movies(new_user_ratings):
     rec = myIBCF(cos_similarity_matrix, unew)
 
     rec_movies = pd.DataFrame({'movie_id': rec,
-                        'title': [movies[movies.movie_id.astype(int) == id]['title'].values[0] for id in rec]})
+                        'title': [movies[movies.movie_id.astype(str) == id]['title'].values[0] for id in rec]})
     return rec_movies
 
 
