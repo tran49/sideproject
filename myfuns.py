@@ -27,7 +27,8 @@ def get_recommended_movies(new_user_ratings):
     unew = np.array([np.nan] * 3706)
 
     for k, v in new_user_ratings.items():
-        unew[movie_id_list.index(str(k))] = float(v)
+        if len(v) <= 5:
+            unew[movie_id_list.index(str(k))] = float(len(v))
 
     rec = myIBCF(cos_similarity_matrix, unew)
 
