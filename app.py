@@ -14,7 +14,7 @@ def get_movie_card(movie, with_rating=False):
     if with_rating:
         return st.radio(
             f"Rate {movie.title}",
-            [None, ⭐, ⭐⭐, ⭐⭐⭐, ⭐⭐⭐⭐, ⭐⭐⭐⭐⭐],
+            [None, "⭐", "⭐⭐", "⭐⭐⭐", "⭐⭐⭐⭐", "⭐⭐⭐⭐⭐"],
             horizontal=False,
             key=f"rating_{movie.movie_id}",
         )
