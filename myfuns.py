@@ -23,7 +23,7 @@ def get_recommended_movies(new_user_ratings):
     movie_id = cos_similarity_matrix.columns
     movie_id_list = movie_id.to_list()
 
-    unew = np.array([np.nan] * 3706)
+    unew = np.array([0.0] * 3706)
 
     for k, v in new_user_ratings.items():
         unew[movie_id_list.index(str(k))] = float(v)
