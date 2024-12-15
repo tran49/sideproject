@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-import streamlit as st
 
 movies = pd.read_csv('movies.dat', sep='::', engine='python',
                      encoding='ISO-8859-1', header=None)
