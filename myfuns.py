@@ -23,13 +23,13 @@ def get_recommended_movies(new_user_ratings):
     movie_id = cos_similarity_matrix.columns
     movie_id_list = movie_id.to_list()
 
-    unew = np.array([np.nan] * 3706)
+    unew = np.array([np.nan] * 100)
 
     for k, v in new_user_ratings.items():
         if len(v) <= 5:
             unew[movie_id_list.index(str(k))] = float(len(v))
 
-    rec = myIBCF(cos_similarity_matrix, unew)
+    rec = myIBCF(cos_similarity_matrix.iloc[:,:100], unew)
 
     rec_movies = pd.DataFrame({'movie_id': [id for (id, _) in rec],
                         'title': [movies[movies.movie_id == int(id)]['title'].values[0] for (id,_) in rec]})
