@@ -55,6 +55,7 @@ def myIBCF(S, new_user):
         recommendations (list): Top 10 recommended movies as tuples of (movie_id, predicted_rating).
     """
     predictions = []
+    S_np = S.to_numpy()
 
     for i in range(S.shape[0]):  # Loop through all movies (rows in S)
         # Skip movies already rated by the new user
@@ -62,8 +63,8 @@ def myIBCF(S, new_user):
             continue
 
         # Identify S(i) = {l: Sil ≠ NA}, where l ≠ NA in S[i, :]
-        valid_similarities = ~np.isnan(S.iloc[i, :])
-        weights = S.iloc[i, valid_similarities]
+        valid_similarities = ~np.isnan(S_np[i, :])
+        weights = S_np[i, valid_similarities]
         rated_movies = new_user[valid_similarities]
 
         # Consider only movies rated by the new user
