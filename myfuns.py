@@ -6,6 +6,8 @@ movies = pd.read_csv('movies.dat', sep='::', engine='python',
                      encoding='ISO-8859-1', header=None)
 movies.columns = ['movie_id', 'title', 'genres']
 
+st.write(movies['movie_id'])
+
 genres = ['Action', 'Adventure', 'Animation', "Children's", "Comedy",  "Crime",
          'Documentary', 'Drama', 'Fantasy', 'Film-Noir', 'Horror', 'Musical',
          'Mystery', 'Romance', 'Sci-Fi', 'Thriller', 'War', 'Western']
@@ -89,8 +91,8 @@ def myIBCF(S, new_user):
     predictions = sorted(predictions, key=lambda x: x[1], reverse=True)
 
     # Extract top 10 recommendations with actual movie IDs
-    movie_ids = S.columns.tolist()
-    st.write(movie_ids)
+    movie_ids = S.columns.tolist() # string type
+
     recommendations = [(movie_ids[i], f"{predicted_rating:.7f}") for i, predicted_rating in predictions[:10]]
 
     # If fewer than 10 predictions, add popular movies based on average ratings
@@ -98,7 +100,6 @@ def myIBCF(S, new_user):
         # System 1 popular movies
         popular_movies = popularity[popularity["review_count"] >= 2000]
         top_movies = popular_movies.sort_values("avg_rating", ascending=False).head(10)
-        print(top_movies.columns)
 
         # Exclude movies already rated by the user
         already_rated = {movie_ids[i] for i, rating in enumerate(new_user) if not np.isnan(rating)}
@@ -108,6 +109,5 @@ def myIBCF(S, new_user):
         for _, row in remaining_popular_movies.iterrows():
             if len(recommendations) >= 10:
                 break
-            print("row['MovieID'] : ", row['MovieID'])
-            recommendations.append((row['MovieID'], f"{row['avg_rating']:.7f}"))
+            recommendations.append((str(row['MovieID']), f"{row['avg_rating']:.7f}"))
     return recommendations
