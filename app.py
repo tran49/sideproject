@@ -4,11 +4,9 @@ from typing import Dict
 from myfuns import genres, get_displayed_movies, get_popular_movies, get_recommended_movies
 
 def get_movie_card(movie, with_rating=False):
-    st.write(movie.movie_id)
-    id = int(movie.movie_id)
     """Generates a movie card with an optional rating input."""
     st.image(
-        f"https://liangfgithub.github.io/MovieImages/{id}.jpg?raw=true",
+        f"https://liangfgithub.github.io/MovieImages/{movie.movie_id}.jpg?raw=true",
         width=150,
     )
     st.markdown(f"**{movie.title}**")
@@ -81,6 +79,7 @@ def show_collaborative_page():
         # Fetch recommendations
         st.subheader("Your Recommendations")
         recommended_movies = get_recommended_movies(ratings)
+        st.write(recommended_movies)
         display_movies_in_grid(recommended_movies)
 
 
