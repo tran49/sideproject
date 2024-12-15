@@ -63,7 +63,7 @@ def myIBCF(S, new_user):
 
         # Identify S(i) = {l: Sil ≠ NA}, where l ≠ NA in S[i, :]
         valid_similarities = ~np.isnan(S.iloc[i, :])
-        weights = S[i, valid_similarities]
+        weights = S.iloc[i, valid_similarities]
         rated_movies = new_user[valid_similarities]
 
         # Consider only movies rated by the new user
