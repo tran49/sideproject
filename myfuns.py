@@ -29,7 +29,7 @@ def get_recommended_movies(new_user_ratings):
         if len(v) <= 5:
             unew[movie_id_list.index(str(k))] = float(len(v))
 
-    rec = myIBCF(unew)
+    rec = myIBCF(cos_similarity_matrix, unew)
 
     rec_movies = pd.DataFrame({'movie_id': [id for (id, _) in rec],
                         'title': [movies[movies.movie_id == int(id)]['title'].values[0] for (id,_) in rec]})
@@ -43,7 +43,7 @@ def get_popular_movies(genre: str):
     return popular_movies
 
 
-def myIBCF(new_user):
+def myIBCF(S, new_user):
     """
     Implements Item-Based Collaborative Filtering (IBCF) for a new user.
 
@@ -56,8 +56,7 @@ def myIBCF(new_user):
         recommendations (list): Top 10 recommended movies as tuples of (movie_id, predicted_rating).
     """
     predictions = []
-  
-    S = cos_similarity_matrix.iloc[:,:100]
+
     S_np = S.to_numpy()
 
     for i in range(S.shape[0]):  # Loop through all movies (rows in S)
