@@ -90,6 +90,7 @@ def myIBCF(S, new_user):
 
     # Extract top 10 recommendations with actual movie IDs
     movie_ids = S.columns.tolist()
+    st.write(movie_ids)
     recommendations = [(movie_ids[i], f"{predicted_rating:.7f}") for i, predicted_rating in predictions[:10]]
 
     # If fewer than 10 predictions, add popular movies based on average ratings
@@ -108,5 +109,5 @@ def myIBCF(S, new_user):
             if len(recommendations) >= 10:
                 break
             print("row['MovieID'] : ", row['MovieID'])
-            recommendations.append(int(row['MovieID']))
+            recommendations.append((row['MovieID'], f"{row['avg_rating']:.7f}"))
     return recommendations
